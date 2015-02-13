@@ -78,8 +78,22 @@ void non_blocking_input_demo(){
     tcsetattr(fileno(stdin),TCSANOW,&t_orig);
 }
 
+void gol_test(){
+    Renderer* renderer = new Renderer();
+    Bitmap* bitmap = renderer->standardBitmap();
+    Keyboard* keyboard = new Keyboard();
+    bool isRunning = true;
+    while(isRunning){
+        keyboard->update();
+        if(keyboard->isKeyDown('q')){
+            isRunning = false;
+        }
+    }
+}
+
 int main(int argc, char** argv){
     sin_test();
+    gol_test();
     //bitmapTest();
     //non_blocking_input_demo();
     return 0;
