@@ -5,6 +5,8 @@
 #include <cmath>
 #include <termios.h>
 #include <sys/poll.h>
+#include "Renderer.hpp"
+#include "Bitmap.hpp"
 
 class Terminal{
 public:
@@ -26,14 +28,6 @@ void sleepForMilliseconds(unsigned int milliseconds){
     usleep(1000 * milliseconds);
 }
 
-void clearScreen(){
-    std::cout << "\033[2J";
-}
-
-void hideCursor(){
-    std::cout << "\033[?25l";
-}
-
 void counterTest(){
     for(int count = 0; count < 1000000; count++){
         std::cout << "\033[60;10H";
@@ -42,39 +36,23 @@ void counterTest(){
     std::cout << std::endl;
 }
 
-void setPixelAt(int x, int y, int color){
-    std::cout << "\033[";
-    std::cout << y << ";" << x << "H";
-    std::cout << "\033[48;5;" << color << "m";
-    std::cout << ' ';
-}
-
 void bitmapTest(){
-    clearScreen();
-    hideCursor();
     float count = 0;
+    Bitmap* bitmap = new Bitmap(80, 24);
+    Renderer* renderer = new Renderer(80, 24);
     while(true){
         count += 4.2f;
         for(int y = 1; y < 25; y++){
             for(int x = 1; x < 81; x++){
                 int bgcolor = (x * y +(int)count) % 255;
-                setPixelAt(x, y, bgcolor);
+                bitmap->setPixel(x, y, bgcolor);
             }
         }
+        renderer->blit(bitmap);
         sleepForMilliseconds(66);
     }
-    std::cout << std::endl;
 }
 
-void clearScreenBuffer(int color){
-    for(int y = 1; y < 26; y++){
-        for(int x = 1; x < 81; x++){
-            std::cout << "\033[" << y << ";" << x << "H";
-            std::cout << "\033[4" << color << "m";
-            std::cout << ' ';
-        }
-    }
-}
 
 
 void enable_non_blocking(){
@@ -103,20 +81,19 @@ int kbhit(){
 }
 
 void sin_test(){
-    clearScreen();
-    hideCursor();
+    Bitmap* bitmap = new Bitmap(80, 24);
+    Renderer* renderer = new Renderer(80, 24);
     float count = 0;
     while(true){
-        count += 0.05f;
-        float x_sin = sin(count) * 40.0f;
-        clearScreenBuffer(0);
-        setPixelAt(41 + x_sin, 10, 1);
-        setPixelAt(1, 1, 2);
-        setPixelAt(80, 1, 2);
-        setPixelAt(1, 23, 2);
-        setPixelAt(80, 23, 2);
-        sleepForMilliseconds(33);
+        count += 0.01f;
+        float x_sin = sin(count) * 39.5f;
+        bitmap->clear(100);
+        bitmap->setPixel(40.5f + x_sin, 10, 1);
+        renderer->blit(bitmap);
+        sleepForMilliseconds(16);
     }
+    delete bitmap;
+    delete renderer;
 }
 void non_blocking_input_demo(){
     struct termios t, t_orig;
@@ -156,8 +133,8 @@ void non_blocking_input_demo(){
 }
 
 int main(int argc, char** argv){
-    //sin_test();
-    bitmapTest();
+    sin_test();
+    //bitmapTest();
     return 0;
 }
 
