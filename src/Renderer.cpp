@@ -1,9 +1,19 @@
 #include <cstdio>
+#include <sys/ioctl.h>
 #include "Renderer.hpp"
 #include "Bitmap.hpp"
 Renderer::Renderer(unsigned int width, unsigned int height){
     _width = width;
     _height = height;
+    this->clearScreen();
+    this->hideCursor();
+}
+
+Renderer::Renderer(){
+    struct winsize ws;
+    ioctl(0, TIOCGWINSZ, &ws);
+    _width = ws.ws_col;
+    _height = ws.ws_row;
     this->clearScreen();
     this->hideCursor();
 }

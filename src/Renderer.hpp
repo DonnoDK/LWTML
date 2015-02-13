@@ -10,6 +10,7 @@ private:
     void hideCursor() const;
 public:
     Renderer(unsigned int width, unsigned int height);
+    Renderer();
     void blit(Bitmap* bitmap) const;
     void clearBuffer(unsigned char color) const;
     unsigned int width() const;

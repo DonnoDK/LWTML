@@ -13,18 +13,6 @@ void sleepForMilliseconds(unsigned int milliseconds){
     usleep(1000 * milliseconds);
 }
 
-#include <sys/ioctl.h>
-unsigned short getTermWidth(){
-    struct winsize ws;
-    ioctl(0, TIOCGWINSZ, &ws);
-    return ws.ws_col;
-}
-unsigned short getTermHeight(){
-    struct winsize ws;
-    ioctl(0, TIOCGWINSZ, &ws);
-    return ws.ws_row;
-}
-
 void counterTest(){
     for(int count = 0; count < 1000000; count++){
         std::cout << "\033[60;10H";
@@ -35,9 +23,7 @@ void counterTest(){
 
 void bitmapTest(){
     float count = 0;
-    int width = getTermWidth();
-    int height = getTermHeight();
-    Renderer* renderer = new Renderer(width, height);
+    Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
     while(true){
         count += 0.2f;
@@ -53,16 +39,19 @@ void bitmapTest(){
 }
 
 void sin_test(){
-    Bitmap* bitmap = new Bitmap(80, 24);
-    Renderer* renderer = new Renderer(80, 24);
+    Renderer* renderer = new Renderer();
+    Bitmap* bitmap = renderer->standardBitmap();
     float count = 0;
     while(true){
-        count += 0.01f;
-        float x_sin = sin(count) * 39.5f;
-        bitmap->clear(100);
-        bitmap->setPixel(40.5f + x_sin, 10, 1);
+        bitmap->clear(0);
+        count += 0.04f;
+        for(int i = 0; i < 20; i++){
+            float x_sin = sin(count - (i * 0.025f)) * bitmap->width() / 2.0f;
+            float y_sin = cos(count - (i * 0.025f)) * bitmap->height() / 2.0f;
+            bitmap->setPixel((bitmap->width() / 2.0f) + x_sin, bitmap->height() / 2.0f + y_sin, 196 + i);
+        }
         renderer->blit(bitmap);
-        sleepForMilliseconds(16);
+        sleepForMilliseconds((1.0f / 15.0f) * 1000);
     }
     delete bitmap;
     delete renderer;
@@ -90,8 +79,8 @@ void non_blocking_input_demo(){
 }
 
 int main(int argc, char** argv){
-    //sin_test();
-    bitmapTest();
+    sin_test();
+    //bitmapTest();
     //non_blocking_input_demo();
     return 0;
 }
