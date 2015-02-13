@@ -1,12 +1,12 @@
 #include <iostream>
-#include <unistd.h>
+#include <sys/select.h>
 #include <string>
 #include <sstream>
 #include <cmath>
 #include <termios.h>
-#include <sys/poll.h>
 #include "Renderer.hpp"
 #include "Bitmap.hpp"
+#include "Keyboard.hpp"
 
 class Terminal{
 public:
@@ -24,6 +24,7 @@ void printStringAt(int x, int y, int color, std::string string){
     std::cout << string << std::endl;
 }
 
+#include <unistd.h> /* usleep */
 void sleepForMilliseconds(unsigned int milliseconds){
     usleep(1000 * milliseconds);
 }
@@ -53,33 +54,6 @@ void bitmapTest(){
     }
 }
 
-
-
-void enable_non_blocking(){
-    struct termios ttystate;
-    tcgetattr(STDIN_FILENO, &ttystate);
-    ttystate.c_lflag &= ~ICANON;
-    ttystate.c_cc[VMIN] = 1;
-    tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
-}
-void disable_non_blocking(){
-    struct termios ttystate;
-    tcgetattr(STDIN_FILENO, &ttystate);
-    ttystate.c_lflag |= ICANON;
-    tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
-}
-
-int kbhit(){
-    struct timeval tv;
-    fd_set fds;
-    tv.tv_sec = 0;
-    tv.tv_usec = 0;
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
-    select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
-    return FD_ISSET(STDIN_FILENO, &fds);
-}
-
 void sin_test(){
     Bitmap* bitmap = new Bitmap(80, 24);
     Renderer* renderer = new Renderer(80, 24);
@@ -102,39 +76,18 @@ void non_blocking_input_demo(){
     t.c_lflag &= ~(ECHO | ICANON);
     t.c_cc[VMIN] = 1;
     tcsetattr(fileno(stdin),TCSANOW,&t);
+    Keyboard* keyboard = new Keyboard();
     while(true) {
-        char c;
-        fprintf(stderr, "tick!\n");
-        if(kbhit()){
-            c = getchar();
-            if(c == '\033'){
-                c = getchar();
-                if(c == '['){
-                    c = getchar();
-                    if(c == 'A'){
-                        fprintf(stderr,"UP\n");
-                    }else if(c == 'B'){
-                        fprintf(stderr,"DOWN\n");
-                    }else if(c == 'C'){
-                        fprintf(stderr,"RIGHT\n");
-                    }else if(c == 'D'){
-                        fprintf(stderr,"LEFT\n");
-                    }
-                }
-            }else{
-                if(c == 'q'){
-                    break;
-                }
-            }
-        }
+        keyboard->update();
         sleepForMilliseconds(33);
     }
     tcsetattr(fileno(stdin),TCSANOW,&t_orig);
 }
 
 int main(int argc, char** argv){
-    sin_test();
+    //sin_test();
     //bitmapTest();
+    non_blocking_input_demo();
     return 0;
 }
 
