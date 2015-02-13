@@ -42,6 +42,13 @@ void counterTest(){
     std::cout << std::endl;
 }
 
+void setPixelAt(int x, int y, int color){
+    std::cout << "\033[";
+    std::cout << y << ";" << x << "H";
+    std::cout << "\033[48;5;" << color << "m";
+    std::cout << ' ';
+}
+
 void bitmapTest(){
     clearScreen();
     hideCursor();
@@ -50,11 +57,8 @@ void bitmapTest(){
         count += 4.2f;
         for(int y = 1; y < 25; y++){
             for(int x = 1; x < 81; x++){
-                std::cout << "\033[" << y << ";" << x << "H";
                 int bgcolor = (x * y +(int)count) % 255;
-                std::cout << "\033[48;5;" << bgcolor << "m";
-                std::cout << ' ';
-
+                setPixelAt(x, y, bgcolor);
             }
         }
         sleepForMilliseconds(66);
@@ -72,13 +76,6 @@ void clearScreenBuffer(int color){
     }
 }
 
-void setPixelAt(int x, int y, int color){
-    std::cout << "\033[";
-    std::cout << y << ";" << x << "H";
-    std::cout << "\033[4" << color << ";1m";
-    std::cout << ' ';
-    std::cout << std::endl;
-}
 
 void enable_non_blocking(){
     struct termios ttystate;
