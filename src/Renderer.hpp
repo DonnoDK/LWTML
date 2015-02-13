@@ -12,5 +12,8 @@ public:
     Renderer(unsigned int width, unsigned int height);
     void blit(Bitmap* bitmap) const;
     void clearBuffer(unsigned char color) const;
+    unsigned int width() const;
+    unsigned int height() const;
+    Bitmap* standardBitmap() const;
 };
 #endif

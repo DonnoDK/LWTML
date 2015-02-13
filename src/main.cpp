@@ -8,25 +8,21 @@
 #include "Bitmap.hpp"
 #include "Keyboard.hpp"
 
-class Terminal{
-public:
-    static void printCharAt(int x, int y, char symbol, int bgColor, int fgColor){
-        std::cout << "\033[3" << fgColor << "m";
-        std::cout << "\033[4" << bgColor << "m";
-        std::cout << "\033[" << y << ";" << x << "H";
-        std::cout << symbol;
-        std::cout << std::endl;
-    }
-};
-void printStringAt(int x, int y, int color, std::string string){
-    std::cout << "\033[" << y << ";" << x << "H";
-    std::cout << "\033[3" << color << "m";
-    std::cout << string << std::endl;
-}
-
 #include <unistd.h> /* usleep */
 void sleepForMilliseconds(unsigned int milliseconds){
     usleep(1000 * milliseconds);
+}
+
+#include <sys/ioctl.h>
+unsigned short getTermWidth(){
+    struct winsize ws;
+    ioctl(0, TIOCGWINSZ, &ws);
+    return ws.ws_col;
+}
+unsigned short getTermHeight(){
+    struct winsize ws;
+    ioctl(0, TIOCGWINSZ, &ws);
+    return ws.ws_row;
 }
 
 void counterTest(){
@@ -39,18 +35,20 @@ void counterTest(){
 
 void bitmapTest(){
     float count = 0;
-    Bitmap* bitmap = new Bitmap(80, 24);
-    Renderer* renderer = new Renderer(80, 24);
+    int width = getTermWidth();
+    int height = getTermHeight();
+    Renderer* renderer = new Renderer(width, height);
+    Bitmap* bitmap = renderer->standardBitmap();
     while(true){
-        count += 4.2f;
-        for(int y = 1; y < 25; y++){
-            for(int x = 1; x < 81; x++){
-                int bgcolor = (x * y +(int)count) % 255;
+        count += 0.2f;
+        for(unsigned int y = 0; y < bitmap->height(); y++){
+            int bgcolor = (int)(y + sin(count) * 10) % 255;
+            for(unsigned int x = 0; x < bitmap->width(); x++){
                 bitmap->setPixel(x, y, bgcolor);
             }
         }
         renderer->blit(bitmap);
-        sleepForMilliseconds(66);
+        sleepForMilliseconds((1.0f / 15.0f) * 1000);
     }
 }
 
@@ -69,6 +67,7 @@ void sin_test(){
     delete bitmap;
     delete renderer;
 }
+
 void non_blocking_input_demo(){
     struct termios t, t_orig;
     tcgetattr(fileno(stdin), &t);
@@ -79,6 +78,12 @@ void non_blocking_input_demo(){
     Keyboard* keyboard = new Keyboard();
     while(true) {
         keyboard->update();
+        if(keyboard->isKeyDown('a')){
+            std::cout << "YES!" << std::endl;
+        }
+        if(keyboard->isArrowKeyDown(Keyboard::UP)){
+            std::cout << "UP!" << std::endl;
+        }
         sleepForMilliseconds(33);
     }
     tcsetattr(fileno(stdin),TCSANOW,&t_orig);
@@ -86,8 +91,8 @@ void non_blocking_input_demo(){
 
 int main(int argc, char** argv){
     //sin_test();
-    //bitmapTest();
-    non_blocking_input_demo();
+    bitmapTest();
+    //non_blocking_input_demo();
     return 0;
 }
 

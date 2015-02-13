@@ -17,7 +17,7 @@ void Renderer::hideCursor() const{
 }
 
 void Renderer::setPixel(unsigned int x, unsigned int y, unsigned char color) const{
-    printf("\033[%i;%iH\033[48;5;%im ", y, x, color);
+    printf("\033[%i;%iH\033[48;5;%im ", y + 1, x + 1, color);
 }
 
 void Renderer::blit(Bitmap* bitmap) const{
@@ -35,4 +35,16 @@ void Renderer::clearBuffer(unsigned char color) const{
             this->setPixel(x, y, color);
         }
     }
+}
+
+unsigned int Renderer::width() const{
+    return _width;
+}
+
+unsigned int Renderer::height() const{
+    return _height;
+}
+
+Bitmap* Renderer::standardBitmap() const{
+    return new Bitmap(_width, _height);
 }

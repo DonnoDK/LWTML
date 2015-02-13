@@ -10,6 +10,7 @@ static fd_set fds;
 
 Keyboard::Keyboard(){
     this->disableEchoAndCarriageReturnOnInput();
+    _keys = 0;
     tv.tv_sec = 0;
     tv.tv_usec = 0;
 }
@@ -31,30 +32,40 @@ void Keyboard::resetTerminalSettings(){
 }
 
 void Keyboard::update(){
-    if(isKeyDown()){
+    _keys = 0;
+    if(didReceiveInput()){
         char c = getchar();
-        if(c == '\033'){
+        if(c != '\033'){
+            if(c >= 'a' && c <= 'z'){
+                _keys = 1 << (c - 'a');
+            }
+        }else{
             c = getchar();
             if(c == '['){
                 c = getchar();
-                if(c == 'A'){
-                    fprintf(stderr,"UP\n");
-                }else if(c == 'B'){
-                    fprintf(stderr,"DOWN\n");
-                }else if(c == 'C'){
-                    fprintf(stderr,"RIGHT\n");
-                }else if(c == 'D'){
-                    fprintf(stderr,"LEFT\n");
+                if(c >= 'A' && c <= 'D'){
+                    _keys = 1 << (c - 39);
                 }
             }
         }
     }
 }
 
-bool Keyboard::isKeyDown(){
-    //tv.tv_sec = 0;
-    //tv.tv_usec = 0;
-    //fd_set fds;
+bool Keyboard::isKeyDown(char key) const{
+    if(key < 97 || key > 122){
+        return false;
+    }
+    return _keys & (1 << (key - 97));
+}
+
+bool Keyboard::isArrowKeyDown(char arrowKey) const{
+    if(arrowKey < UP || arrowKey > DOWN){
+        return false;
+    }
+    return _keys & (1 << (arrowKey - 39));
+}
+
+bool Keyboard::didReceiveInput(){
     FD_ZERO(&fds);
     FD_SET(fileno(stdin), &fds);
     select(fileno(stdin) + 1, &fds, NULL, NULL, &tv);
