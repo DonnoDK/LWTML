@@ -22,7 +22,7 @@ Keyboard::~Keyboard(){
 void Keyboard::disableEchoAndCarriageReturnOnInput(){
     tcgetattr(fileno(stdin), &_term);
     _term_orig = _term;
-    _term.c_cflag &= ~(ECHO | ICANON);
+    _term.c_lflag &= ~(ECHO | ICANON);
     _term.c_cc[VMIN] = 1;
     tcsetattr(fileno(stdin), TCSANOW, &_term);
 }

@@ -18,12 +18,21 @@ Renderer::Renderer(){
     this->hideCursor();
 }
 
+Renderer::~Renderer(){
+    showCursor();
+    clearScreen();
+}
+
 void Renderer::clearScreen() const{
     printf("\033[2J");
 }
 
 void Renderer::hideCursor() const{
     printf("\033[?25l");
+}
+
+void Renderer::showCursor() const{
+    printf("\033[?25h");
 }
 
 void Renderer::setPixel(unsigned int x, unsigned int y, unsigned char color) const{

@@ -8,9 +8,11 @@ private:
     void setPixel(unsigned int x, unsigned int y, unsigned char color) const;
     void clearScreen() const;
     void hideCursor() const;
+    void showCursor() const;
 public:
     Renderer(unsigned int width, unsigned int height);
     Renderer();
+    ~Renderer();
     void blit(Bitmap* bitmap) const;
     void clearBuffer(unsigned char color) const;
     unsigned int width() const;

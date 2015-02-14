@@ -160,13 +160,15 @@ void gol_test(){
 
         //sleepForMilliseconds((1.0f / 33.0f) * 1000);
     }
+    delete renderer;
+    delete keyboard;
 }
 
 int main(int argc, char** argv){
     //sin_test();
-    //gol_test();
+    gol_test();
     //bitmapTest();
-    non_blocking_input_demo();
+    //non_blocking_input_demo();
     return 0;
 }
 
