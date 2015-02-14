@@ -116,49 +116,49 @@ void gol_test(){
             isRunning = false;
         }
 
-        //for(int y = 0; y < (int)current_pop->height(); y++){
-        //    for(int x = 0; x < (int)current_pop->width(); x++){
-        //        /* TODO: logic here */
-        //        int neightbors = 0;
-        //        for(int yi = y - 1; yi <= y + 1; yi++){
-        //            for(int xi = x - 1; xi <= x + 1; xi++){
-        //                if(xi == x && yi == y){
-        //                    continue;
-        //                }
-        //                if(xi < 0 || yi < 0){
-        //                    continue;
-        //                }
-        //                if(xi > (int)current_pop->width()){
-        //                    continue;
-        //                }
-        //                if(yi > (int)current_pop->height()){
-        //                    continue;
-        //                }
-        //                if(old_pop->pixel(xi, yi) > 0){
-        //                    neightbors++;
-        //                }
-        //            }
-        //        }
-        //        /* alive */
-        //        if(current_pop->pixel(x, y) > 0){
-        //            if(neightbors < 2 || neightbors > 3){
-        //                current_pop->setPixel(x, y, 0);
-        //            }
-        //        }else{ /* dead */
-        //            if(neightbors == 3){
-        //                current_pop->setPixel(x, y, 7);
-        //            }
-        //        }
-        //    }
-        //}
+        for(int y = 0; y < (int)current_pop->height(); y++){
+            for(int x = 0; x < (int)current_pop->width(); x++){
+                /* TODO: logic here */
+                int neightbors = 0;
+                for(int yi = y - 1; yi <= y + 1; yi++){
+                    for(int xi = x - 1; xi <= x + 1; xi++){
+                        if(xi == x && yi == y){
+                            continue;
+                        }
+                        if(xi < 0 || yi < 0){
+                            continue;
+                        }
+                        if(xi > (int)current_pop->width()){
+                            continue;
+                        }
+                        if(yi > (int)current_pop->height()){
+                            continue;
+                        }
+                        if(old_pop->pixel(xi, yi) > 0){
+                            neightbors++;
+                        }
+                    }
+                }
+                /* alive */
+                if(current_pop->pixel(x, y) > 0){
+                    if(neightbors < 2 || neightbors > 3){
+                        current_pop->setPixel(x, y, 0);
+                    }
+                }else{ /* dead */
+                    if(neightbors == 3){
+                        current_pop->setPixel(x, y, 7);
+                    }
+                }
+            }
+        }
 
-        //renderer->blit(current_pop);
+        renderer->blit(current_pop);
 
-        //Bitmap* temp = current_pop;
-        //current_pop = old_pop;
-        //old_pop = temp;
+        Bitmap* temp = current_pop;
+        current_pop = old_pop;
+        old_pop = temp;
 
-        //sleepForMilliseconds((1.0f / 33.0f) * 1000);
+        sleepForMilliseconds((1.0f / 33.0f) * 1000);
     }
     delete renderer;
     delete keyboard;
