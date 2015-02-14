@@ -1,8 +1,9 @@
 #include "Bitmap.hpp"
 #include <cstring>
-Bitmap::Bitmap(unsigned int width, unsigned int height){
+Bitmap::Bitmap(unsigned int width, unsigned int height, unsigned char colorkey){
     _width = width;
     _height = height;
+    _colorkey = colorkey;
     _pixels = new unsigned char[_width * _height];
 }
 
@@ -28,6 +29,10 @@ unsigned char Bitmap::pixel(unsigned int x, unsigned int y) const{
         return 0;
     }
     return _pixels[x + y * _width];
+}
+
+unsigned char Bitmap::colorkey() const{
+    return _colorkey;
 }
 
 unsigned int Bitmap::height() const{

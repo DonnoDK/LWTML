@@ -41,10 +41,13 @@ void Renderer::setPixel(unsigned int x, unsigned int y, unsigned char color) con
 }
 
 void Renderer::blit(Bitmap* bitmap) const{
+    unsigned char colorkey = bitmap->colorkey();
     for(unsigned int y = 0; y < bitmap->height(); y++){
         for(unsigned int x = 0; x < bitmap->width(); x++){
             unsigned char color = bitmap->pixel(x, y);
-            this->setPixel(x, y, color);
+            if(color != colorkey){
+                this->setPixel(x, y, color);
+            }
         }
     }
 }
@@ -66,5 +69,5 @@ unsigned int Renderer::height() const{
 }
 
 Bitmap* Renderer::standardBitmap() const{
-    return new Bitmap(_width, _height);
+    return new Bitmap(_width, _height, 0);
 }

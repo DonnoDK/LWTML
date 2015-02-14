@@ -35,7 +35,7 @@ void counterTest(){
 }
 
 void bitmapTest(){
-    float count = 0;
+    int count = 0;
     Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
     Keyboard* keyboard = new Keyboard();
@@ -44,10 +44,10 @@ void bitmapTest(){
         if(keyboard->isKeyDown('q')){
             break;
         }
-        count += 1.2f;
         for(unsigned int y = 0; y < bitmap->height(); y++){
             for(unsigned int x = 0; x < bitmap->width(); x++){
-                int bgcolor = (int)((x * y) + count) + y * x% 255;
+                int bgcolor = x + y + 100 % 255;
+                count += 1;
                 bitmap->setPixel(x, y, bgcolor);
             }
         }
@@ -189,8 +189,8 @@ void gol_test(){
 
 int main(int argc, char** argv){
     //sin_test();
-    gol_test();
-    //bitmapTest();
+    //gol_test();
+    bitmapTest();
     //non_blocking_input_demo();
     return 0;
 }
