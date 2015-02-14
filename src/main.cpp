@@ -100,7 +100,7 @@ void gol_test(){
         for(unsigned int x = 0; x < current_pop->width(); x++){
             int answer = randomIntFromTo(1, 2);
             if(answer % 2 == 0){
-                current_pop->setPixel(x, y, 7);
+                current_pop->setPixel(x, y, 1);
             }
         }
     }
@@ -146,7 +146,7 @@ void gol_test(){
                     }
                 }else{ /* dead */
                     if(neightbors == 3){
-                        current_pop->setPixel(x, y, 7);
+                        current_pop->setPixel(x, y, 1);
                     }
                 }
             }
