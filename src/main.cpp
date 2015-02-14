@@ -1,9 +1,6 @@
 #include <iostream>
-#include <sys/select.h>
 #include <string>
-#include <sstream>
 #include <cmath>
-#include <termios.h>
 #include "Renderer.hpp"
 #include "Bitmap.hpp"
 #include "Keyboard.hpp"
@@ -12,6 +9,22 @@
 void sleepForMilliseconds(unsigned int milliseconds){
     usleep(1000 * milliseconds);
 }
+
+#include <ctime>
+#include <cstdlib>
+void seedRandom(){
+    static bool seeded = false;
+    if(seeded == false){
+        seeded = true;
+        srand(time(NULL));
+    }
+}
+
+int randomIntFromTo(unsigned int from, unsigned int to){
+    seedRandom();
+    return rand() % to + from;
+}
+
 
 void counterTest(){
     for(int count = 0; count < 1000000; count++){
@@ -26,10 +39,10 @@ void bitmapTest(){
     Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
     while(true){
-        count += 0.2f;
+        count += 1.2f;
         for(unsigned int y = 0; y < bitmap->height(); y++){
-            int bgcolor = (int)(y + sin(count) * 10) % 255;
             for(unsigned int x = 0; x < bitmap->width(); x++){
+                int bgcolor = (int)((x * y) + count) + y * x% 255;
                 bitmap->setPixel(x, y, bgcolor);
             }
         }
@@ -58,44 +71,102 @@ void sin_test(){
 }
 
 void non_blocking_input_demo(){
-    struct termios t, t_orig;
-    tcgetattr(fileno(stdin), &t);
-    t_orig = t;
-    t.c_lflag &= ~(ECHO | ICANON);
-    t.c_cc[VMIN] = 1;
-    tcsetattr(fileno(stdin),TCSANOW,&t);
     Keyboard* keyboard = new Keyboard();
     while(true) {
         keyboard->update();
         if(keyboard->isKeyDown('a')){
             std::cout << "YES!" << std::endl;
         }
+        if(keyboard->isKeyDown('q')){
+            break;
+        }
         if(keyboard->isArrowKeyDown(Keyboard::UP)){
             std::cout << "UP!" << std::endl;
         }
         sleepForMilliseconds(33);
     }
-    tcsetattr(fileno(stdin),TCSANOW,&t_orig);
+    delete keyboard;
 }
 
 void gol_test(){
     Renderer* renderer = new Renderer();
-    Bitmap* bitmap = renderer->standardBitmap();
+    Bitmap* pop1 = renderer->standardBitmap();
+    Bitmap* pop2 = renderer->standardBitmap();
+    pop1->clear(0);
+    pop2->clear(0);
+    Bitmap* current_pop = pop1;
+    Bitmap* old_pop = pop2;
+    for(unsigned int y = 0; y < current_pop->height(); y++){
+        for(unsigned int x = 0; x < current_pop->width(); x++){
+            int answer = randomIntFromTo(1, 2);
+            if(answer % 2 == 0){
+                current_pop->setPixel(x, y, 7);
+            }
+        }
+    }
+    Bitmap* temp = current_pop;
+    current_pop = old_pop;
+    old_pop = temp;
     Keyboard* keyboard = new Keyboard();
     bool isRunning = true;
+
     while(isRunning){
         keyboard->update();
         if(keyboard->isKeyDown('q')){
             isRunning = false;
         }
+
+        //for(int y = 0; y < (int)current_pop->height(); y++){
+        //    for(int x = 0; x < (int)current_pop->width(); x++){
+        //        /* TODO: logic here */
+        //        int neightbors = 0;
+        //        for(int yi = y - 1; yi <= y + 1; yi++){
+        //            for(int xi = x - 1; xi <= x + 1; xi++){
+        //                if(xi == x && yi == y){
+        //                    continue;
+        //                }
+        //                if(xi < 0 || yi < 0){
+        //                    continue;
+        //                }
+        //                if(xi > (int)current_pop->width()){
+        //                    continue;
+        //                }
+        //                if(yi > (int)current_pop->height()){
+        //                    continue;
+        //                }
+        //                if(old_pop->pixel(xi, yi) > 0){
+        //                    neightbors++;
+        //                }
+        //            }
+        //        }
+        //        /* alive */
+        //        if(current_pop->pixel(x, y) > 0){
+        //            if(neightbors < 2 || neightbors > 3){
+        //                current_pop->setPixel(x, y, 0);
+        //            }
+        //        }else{ /* dead */
+        //            if(neightbors == 3){
+        //                current_pop->setPixel(x, y, 7);
+        //            }
+        //        }
+        //    }
+        //}
+
+        //renderer->blit(current_pop);
+
+        //Bitmap* temp = current_pop;
+        //current_pop = old_pop;
+        //old_pop = temp;
+
+        //sleepForMilliseconds((1.0f / 33.0f) * 1000);
     }
 }
 
 int main(int argc, char** argv){
-    sin_test();
-    gol_test();
+    //sin_test();
+    //gol_test();
     //bitmapTest();
-    //non_blocking_input_demo();
+    non_blocking_input_demo();
     return 0;
 }
 
