@@ -19,6 +19,18 @@ void Bitmap::setPixel(unsigned int x, unsigned int y, unsigned char color){
     _pixels[x + y * _width] = color;
 }
 
+void Bitmap::blit(Bitmap* bitmap, unsigned int xOffset, unsigned int yOffset){
+    unsigned char colorkey = bitmap->colorkey();
+    for(unsigned int y = 0; y < bitmap->height(); y++){
+        for(unsigned int x = 0; x < bitmap->width(); x++){
+            unsigned char pixel = bitmap->pixel(x, y);
+            if(pixel != colorkey){
+                setPixel(xOffset + x, yOffset + y, pixel);
+            }
+        }
+    }
+}
+
 void Bitmap::clear(unsigned char color){
     memset(_pixels, color, _width * _height);
 }

@@ -46,13 +46,13 @@ void bitmapTest(){
         }
         for(unsigned int y = 0; y < bitmap->height(); y++){
             for(unsigned int x = 0; x < bitmap->width(); x++){
-                int bgcolor = x + y + 100 % 255;
+                int bgcolor = count + x + y + 100 % 255;
                 count += 1;
                 bitmap->setPixel(x, y, bgcolor);
             }
         }
         renderer->blit(bitmap);
-        sleepForMilliseconds((1.0f / 120.0f) * 1000);
+        sleepForMilliseconds((1.0f / 30.0f) * 1000);
     }
     delete keyboard;
     delete bitmap;
@@ -187,10 +187,42 @@ void gol_test(){
     delete pop2;
 }
 
+void blitTest(){
+    float count = 0;
+    Renderer* renderer = new Renderer();
+    Bitmap* bitmap = renderer->standardBitmap();
+    Bitmap* sprite = new Bitmap(bitmap->width() / 3, bitmap->height() / 3, 0);
+    Keyboard* keyboard = new Keyboard();
+    float color_count = 0;
+    while(true){
+        keyboard->update();
+        if(keyboard->isKeyDown('q')){
+            break;
+        }
+        bitmap->clear(0);
+        for(unsigned int y = 0; y < sprite->height(); y++){
+            for(unsigned int x = 0; x < sprite->width(); x++){
+                int bgcolor = color_count + x + y + 100 % 255;
+                color_count += 0.01f;
+                sprite->setPixel(x, y, bgcolor);
+            }
+        }
+        count += 0.1f;
+        bitmap->blit(sprite, ((bitmap->width() / 2) - (sprite->width() / 2)) + sin(count) * bitmap->width() / 2, 10);
+        renderer->blit(bitmap);
+        sleepForMilliseconds((1.0f / 30.0f) * 1000);
+    }
+    delete keyboard;
+    delete bitmap;
+    delete sprite;
+    delete renderer;
+}
+
 int main(int argc, char** argv){
     //sin_test();
     //gol_test();
-    bitmapTest();
+    //bitmapTest();
+    blitTest();
     //non_blocking_input_demo();
     return 0;
 }

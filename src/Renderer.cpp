@@ -68,6 +68,9 @@ unsigned int Renderer::height() const{
     return _height;
 }
 
+/* TODO: Bitmap* Renderer::standardBitmap(unsigned char colorkey) const */
 Bitmap* Renderer::standardBitmap() const{
-    return new Bitmap(_width, _height, 0);
+    /* TODO: change to a more sane colorkey */
+    /* TODO: or pass in trough parameter */
+    return new Bitmap(_width, _height, 1);
 }
