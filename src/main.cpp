@@ -47,7 +47,7 @@ void bitmapTest(){
             }
         }
         renderer->blit(bitmap);
-        sleepForMilliseconds((1.0f / 15.0f) * 1000);
+        sleepForMilliseconds((1.0f / 120.0f) * 1000);
     }
 }
 
@@ -88,6 +88,17 @@ void non_blocking_input_demo(){
     delete keyboard;
 }
 
+void randomReseed(Bitmap* map){
+    for(unsigned int y = 0; y < map->height(); y++){
+        for(unsigned int x = 0; x < map->width(); x++){
+            int answer = randomIntFromTo(1, 2);
+            if(answer % 2 == 0){
+                map->setPixel(x, y, 1);
+            }
+        }
+    }
+}
+
 void gol_test(){
     Renderer* renderer = new Renderer();
     Bitmap* pop1 = renderer->standardBitmap();
@@ -96,14 +107,15 @@ void gol_test(){
     pop2->clear(0);
     Bitmap* current_pop = pop1;
     Bitmap* old_pop = pop2;
-    for(unsigned int y = 0; y < current_pop->height(); y++){
-        for(unsigned int x = 0; x < current_pop->width(); x++){
-            int answer = randomIntFromTo(1, 2);
-            if(answer % 2 == 0){
-                current_pop->setPixel(x, y, 1);
-            }
-        }
-    }
+    randomReseed(current_pop);
+    //for(unsigned int y = 0; y < current_pop->height(); y++){
+    //    for(unsigned int x = 0; x < current_pop->width(); x++){
+    //        int answer = randomIntFromTo(1, 2);
+    //        if(answer % 2 == 0){
+    //            current_pop->setPixel(x, y, 1);
+    //        }
+    //    }
+    //}
     Bitmap* temp = current_pop;
     current_pop = old_pop;
     old_pop = temp;
@@ -114,6 +126,11 @@ void gol_test(){
         keyboard->update();
         if(keyboard->isKeyDown('q')){
             isRunning = false;
+        }
+        if(keyboard->isKeyDown('r')){
+            randomReseed(old_pop);
+            current_pop->clear(0);
+            continue;
         }
 
         for(int y = 0; y < (int)current_pop->height(); y++){
@@ -158,7 +175,7 @@ void gol_test(){
         current_pop = old_pop;
         old_pop = temp;
 
-        sleepForMilliseconds((1.0f / 33.0f) * 1000);
+        sleepForMilliseconds((1.0f / 30.0f) * 1000);
     }
     delete renderer;
     delete keyboard;
