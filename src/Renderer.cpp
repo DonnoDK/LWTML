@@ -20,6 +20,7 @@ Renderer::Renderer(){
 
 Renderer::~Renderer(){
     showCursor();
+    clearBuffer(0);
     clearScreen();
 }
 

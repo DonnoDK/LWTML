@@ -38,7 +38,12 @@ void bitmapTest(){
     float count = 0;
     Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
+    Keyboard* keyboard = new Keyboard();
     while(true){
+        keyboard->update();
+        if(keyboard->isKeyDown('q')){
+            break;
+        }
         count += 1.2f;
         for(unsigned int y = 0; y < bitmap->height(); y++){
             for(unsigned int x = 0; x < bitmap->width(); x++){
@@ -49,6 +54,9 @@ void bitmapTest(){
         renderer->blit(bitmap);
         sleepForMilliseconds((1.0f / 120.0f) * 1000);
     }
+    delete keyboard;
+    delete bitmap;
+    delete renderer;
 }
 
 void sin_test(){
@@ -108,14 +116,6 @@ void gol_test(){
     Bitmap* current_pop = pop1;
     Bitmap* old_pop = pop2;
     randomReseed(current_pop);
-    //for(unsigned int y = 0; y < current_pop->height(); y++){
-    //    for(unsigned int x = 0; x < current_pop->width(); x++){
-    //        int answer = randomIntFromTo(1, 2);
-    //        if(answer % 2 == 0){
-    //            current_pop->setPixel(x, y, 1);
-    //        }
-    //    }
-    //}
     Bitmap* temp = current_pop;
     current_pop = old_pop;
     old_pop = temp;
@@ -145,10 +145,10 @@ void gol_test(){
                         if(xi < 0 || yi < 0){
                             continue;
                         }
-                        if(xi > (int)current_pop->width()){
+                        if(xi >= (int)current_pop->width()){
                             continue;
                         }
-                        if(yi > (int)current_pop->height()){
+                        if(yi >= (int)current_pop->height()){
                             continue;
                         }
                         if(old_pop->pixel(xi, yi) > 0){
@@ -168,17 +168,23 @@ void gol_test(){
                 }
             }
         }
+        /* TODO: copy map */
 
         renderer->blit(current_pop);
+        for(int y = 0; y < (int)current_pop->height(); y++){
+            for(int x = 0; x < (int)current_pop->width(); x++){
+                int cell = current_pop->pixel(x, y);
+                old_pop->setPixel(x, y, cell);
+            }
+        }
 
-        Bitmap* temp = current_pop;
-        current_pop = old_pop;
-        old_pop = temp;
 
-        sleepForMilliseconds((1.0f / 30.0f) * 1000);
+        sleepForMilliseconds((1.0f / 60.0f) * 1000);
     }
     delete renderer;
     delete keyboard;
+    delete pop1;
+    delete pop2;
 }
 
 int main(int argc, char** argv){
