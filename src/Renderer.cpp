@@ -2,6 +2,7 @@
 #include <sys/ioctl.h>
 #include "Renderer.hpp"
 #include "Bitmap.hpp"
+#include "Color.hpp"
 Renderer::Renderer(unsigned int width, unsigned int height){
     _width = width;
     _height = height;
@@ -72,5 +73,5 @@ unsigned int Renderer::height() const{
 Bitmap* Renderer::standardBitmap() const{
     /* TODO: change to a more sane colorkey */
     /* TODO: or pass in trough parameter */
-    return new Bitmap(_width, _height, 1);
+    return new Bitmap(_width, _height, Color::colorFromRGB(255,0,255));
 }

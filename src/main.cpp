@@ -1,30 +1,11 @@
 #include <iostream>
-#include <string>
 #include <cmath>
 #include "Renderer.hpp"
 #include "Bitmap.hpp"
 #include "Keyboard.hpp"
-
-#include <unistd.h> /* usleep */
-void sleepForMilliseconds(unsigned int milliseconds){
-    usleep(1000 * milliseconds);
-}
-
-#include <ctime>
-#include <cstdlib>
-void seedRandom(){
-    static bool seeded = false;
-    if(seeded == false){
-        seeded = true;
-        srand(time(NULL));
-    }
-}
-
-int randomIntFromTo(unsigned int from, unsigned int to){
-    seedRandom();
-    return rand() % to + from;
-}
-
+#include "Color.hpp"
+#include "Random.hpp"
+#include "Time.hpp"
 
 void counterTest(){
     for(int count = 0; count < 1000000; count++){
@@ -35,10 +16,12 @@ void counterTest(){
 }
 
 void bitmapTest(){
-    int count = 0;
     Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
     Keyboard* keyboard = new Keyboard();
+    int r_count = 0;
+    int g_count = 0;
+    int b_count = 0;
     while(true){
         keyboard->update();
         if(keyboard->isKeyDown('q')){
@@ -46,13 +29,32 @@ void bitmapTest(){
         }
         for(unsigned int y = 0; y < bitmap->height(); y++){
             for(unsigned int x = 0; x < bitmap->width(); x++){
-                int bgcolor = count + x + y + 100 % 255;
-                count += 1;
-                bitmap->setPixel(x, y, bgcolor);
+                unsigned char r = r_count;
+                unsigned char g = g_count;
+                unsigned char b = b_count;
+                unsigned char color = Color::colorFromRGB(r, g, b);
+                bitmap->setPixel(x, y, color);
+                if(b_count > 255){
+                    r_count = 0;
+                    g_count = 0;
+                    b_count = 0;
+                    continue;
+                }
+                if(g_count > 255){
+                    g_count = 0;
+                    b_count += 51;
+                    continue;
+                }
+                if(r_count > 255){
+                    r_count = 0;
+                    g_count += 51;
+                    continue;
+                }
+                r_count += 51;
             }
         }
         renderer->blit(bitmap);
-        sleepForMilliseconds((1.0f / 30.0f) * 1000);
+        Time::msleep((1.0f / 30.0f) * 1000);
     }
     delete keyboard;
     delete bitmap;
@@ -62,8 +64,13 @@ void bitmapTest(){
 void sin_test(){
     Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
+    Keyboard* keyboard = new Keyboard();
     float count = 0;
     while(true){
+        keyboard->update();
+        if(keyboard->isKeyDown('q')){
+            break;
+        }
         bitmap->clear(0);
         count += 0.04f;
         for(int i = 0; i < 20; i++){
@@ -72,9 +79,10 @@ void sin_test(){
             bitmap->setPixel((bitmap->width() / 2.0f) + x_sin, bitmap->height() / 2.0f + y_sin, 196 + i);
         }
         renderer->blit(bitmap);
-        sleepForMilliseconds((1.0f / 15.0f) * 1000);
+        Time::msleep((1.0f / 15.0f) * 1000);
     }
     delete bitmap;
+    delete keyboard;
     delete renderer;
 }
 
@@ -91,7 +99,7 @@ void non_blocking_input_demo(){
         if(keyboard->isArrowKeyDown(Keyboard::UP)){
             std::cout << "UP!" << std::endl;
         }
-        sleepForMilliseconds(33);
+        Time::msleep(33);
     }
     delete keyboard;
 }
@@ -99,7 +107,7 @@ void non_blocking_input_demo(){
 void randomReseed(Bitmap* map){
     for(unsigned int y = 0; y < map->height(); y++){
         for(unsigned int x = 0; x < map->width(); x++){
-            int answer = randomIntFromTo(1, 2);
+            int answer = Random::intFromTo(1, 2);
             if(answer % 2 == 0){
                 map->setPixel(x, y, 1);
             }
@@ -179,7 +187,7 @@ void gol_test(){
         }
 
 
-        sleepForMilliseconds((1.0f / 60.0f) * 1000);
+        Time::msleep((1.0f / 60.0f) * 1000);
     }
     delete renderer;
     delete keyboard;
@@ -210,7 +218,7 @@ void blitTest(){
         count += 0.1f;
         bitmap->blit(sprite, ((bitmap->width() / 2) - (sprite->width() / 2)) + sin(count) * bitmap->width() / 2, 10);
         renderer->blit(bitmap);
-        sleepForMilliseconds((1.0f / 30.0f) * 1000);
+        Time::msleep((1.0f / 30.0f) * 1000);
     }
     delete keyboard;
     delete bitmap;
@@ -219,9 +227,9 @@ void blitTest(){
 }
 
 int main(int argc, char** argv){
-    //sin_test();
-    //gol_test();
-    //bitmapTest();
+    sin_test();
+    gol_test();
+    bitmapTest();
     blitTest();
     //non_blocking_input_demo();
     return 0;
