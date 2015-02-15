@@ -1,6 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 class Bitmap;
+class Text;
 class Renderer{
 private:
     unsigned int _width;
@@ -14,6 +15,7 @@ public:
     Renderer();
     ~Renderer();
     void blit(Bitmap* bitmap) const;
+    void renderText(Text* text, unsigned int x, unsigned int y) const;
     void clearBuffer(unsigned char color) const;
     unsigned int width() const;
     unsigned int height() const;

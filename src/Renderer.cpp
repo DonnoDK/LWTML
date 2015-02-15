@@ -2,6 +2,7 @@
 #include "Bitmap.hpp"
 #include "Color.hpp"
 #include "Terminal.hpp"
+#include "Text.hpp"
 Renderer::Renderer(unsigned int width, unsigned int height){
     _width = width;
     _height = height;
@@ -44,6 +45,11 @@ void Renderer::clearBuffer(unsigned char color) const{
             this->setPixel(x, y, color);
         }
     }
+}
+
+void Renderer::renderText(Text* text, unsigned int x, unsigned int y) const{
+    /* TODO: finish implementation */
+    
 }
 
 unsigned int Renderer::width() const{
