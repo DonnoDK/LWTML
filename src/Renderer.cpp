@@ -1,44 +1,29 @@
-#include <cstdio>
-#include <sys/ioctl.h>
 #include "Renderer.hpp"
 #include "Bitmap.hpp"
 #include "Color.hpp"
+#include "Terminal.hpp"
 Renderer::Renderer(unsigned int width, unsigned int height){
     _width = width;
     _height = height;
-    this->clearScreen();
-    this->hideCursor();
+    Terminal::clearScreen();
+    Terminal::hideCursor();
 }
 
 Renderer::Renderer(){
-    struct winsize ws;
-    ioctl(0, TIOCGWINSZ, &ws);
-    _width = ws.ws_col;
-    _height = ws.ws_row;
-    this->clearScreen();
-    this->hideCursor();
+    _width = Terminal::width();
+    _height = Terminal::height();
+    Terminal::clearScreen();
+    Terminal::hideCursor();
 }
 
 Renderer::~Renderer(){
-    showCursor();
+    Terminal::showCursor();
     clearBuffer(0);
-    clearScreen();
-}
-
-void Renderer::clearScreen() const{
-    printf("\033[2J");
-}
-
-void Renderer::hideCursor() const{
-    printf("\033[?25l");
-}
-
-void Renderer::showCursor() const{
-    printf("\033[?25h");
+    Terminal::clearScreen();
 }
 
 void Renderer::setPixel(unsigned int x, unsigned int y, unsigned char color) const{
-    printf("\033[%i;%iH\033[48;5;%im ", y + 1, x + 1, color);
+    Terminal::setChar(' ', x, y, color, 0);
 }
 
 void Renderer::blit(Bitmap* bitmap) const{
