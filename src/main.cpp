@@ -226,11 +226,28 @@ void blitTest(){
     delete renderer;
 }
 
+void timer_test(){
+    Keyboard* keyboard = new Keyboard();
+    Time::Timer* timer = new Time::Timer();
+    while(true){
+        keyboard->update();
+        std::cout << timer->deltaTime() << std::endl;
+        timer->update();
+        if(keyboard->isKeyDown('q')){
+            break;
+        }
+        Time::msleep(66);
+    }
+    delete keyboard;
+    delete timer;
+}
+
 int main(int argc, char** argv){
-    sin_test();
-    gol_test();
-    bitmapTest();
-    blitTest();
+    timer_test();
+    //sin_test();
+    //gol_test();
+    //bitmapTest();
+    //blitTest();
     //non_blocking_input_demo();
     return 0;
 }
