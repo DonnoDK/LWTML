@@ -5,6 +5,7 @@ namespace Terminal{
     void hideCursor();
     void showCursor();
     void setChar(unsigned char c, unsigned int x, unsigned int y, unsigned char bgcolor, unsigned char fgcolor);
+    void writeString(const char* string, unsigned int x, unsigned int y, unsigned bgcolor, unsigned char fgcolor);
     unsigned short width();
     unsigned short height();
 };

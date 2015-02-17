@@ -48,8 +48,12 @@ void Renderer::clearBuffer(unsigned char color) const{
 }
 
 void Renderer::renderText(Text* text, unsigned int x, unsigned int y) const{
-    /* TODO: finish implementation */
-    
+    unsigned int str_len = text->value().length();
+    if(x + str_len > _width){
+        return;
+    }
+    Terminal::writeString(text->value().c_str(), x, y, text->backgroundColor(), text->textColor());
+    //void writeString(const char* string, unsigned int x, unsigned int y, unsigned bgcolor, unsigned char fgcolor);
 }
 
 unsigned int Renderer::width() const{

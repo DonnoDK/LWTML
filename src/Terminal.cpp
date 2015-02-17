@@ -18,6 +18,10 @@ void Terminal::setChar(unsigned char c, unsigned int x, unsigned int y, unsigned
     printf("\033[%i;%iH\033[38;5;%im\033[48;5;%im%c", y + 1, x + 1, fgcolor, bgcolor, c);
 }
 
+void Terminal::writeString(const char* string, unsigned int x, unsigned int y, unsigned bgcolor, unsigned char fgcolor){
+    printf("\033[%i;%iH\033[38;5;%im\033[48;5;%im%s\n", y + 1, x + 1, fgcolor, bgcolor, string);
+}
+
 static struct winsize ws;
 unsigned short Terminal::width(){
     ioctl(0, TIOCGWINSZ, &ws);
