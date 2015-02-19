@@ -1,6 +1,7 @@
 #ifndef KEYBOARD_HPP
 #define KEYBOARD_HPP
-class Keyboard{
+#include "IService.hpp"
+class Keyboard : public IService{
 private:
     void disableEchoAndCarriageReturnOnInput();
     void resetTerminalSettings();
@@ -12,6 +13,7 @@ public:
     void update();
     bool isKeyDown(char key) const;
     bool isArrowKeyDown(char arrowKey) const;
+    unsigned int type() const;
     enum ArrowKeys{
         UP = 65,
         RIGHT,

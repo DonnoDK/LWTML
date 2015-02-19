@@ -3,6 +3,8 @@
 #include "Color.hpp"
 #include "Terminal.hpp"
 #include "Text.hpp"
+#include "IService.hpp"
+
 Renderer::Renderer(unsigned int width, unsigned int height){
     _width = width;
     _height = height;
@@ -69,4 +71,8 @@ Bitmap* Renderer::standardBitmap() const{
     /* TODO: change to a more sane colorkey */
     /* TODO: or pass in trough parameter */
     return new Bitmap(_width, _height, Color::colorFromRGB(255,0,255));
+}
+
+unsigned int Renderer::type() const{
+    return IService::RENDERER;
 }

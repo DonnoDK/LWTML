@@ -7,6 +7,7 @@
 #include "Random.hpp"
 #include "Time.hpp"
 #include "Text.hpp"
+#include "ServiceLocator.hpp"
 
 void counterTest(){
     for(int count = 0; count < 1000000; count++){
@@ -17,9 +18,12 @@ void counterTest(){
 }
 
 void bitmapTest(){
-    Renderer* renderer = new Renderer();
+    ServiceLocator* sl = new ServiceLocator();
+    sl->installService(new Renderer());
+    sl->installService(new Keyboard());
+    Renderer* renderer = (Renderer*)sl->service(IService::RENDERER);
+    Keyboard* keyboard = (Keyboard*)sl->service(IService::KEYBOARD_INPUT);
     Bitmap* bitmap = renderer->standardBitmap();
-    Keyboard* keyboard = new Keyboard();
     int r_count = 0;
     int g_count = 0;
     int b_count = 0;
@@ -57,9 +61,8 @@ void bitmapTest(){
         renderer->blit(bitmap);
         Time::msleep((1.0f / 30.0f) * 1000);
     }
-    delete keyboard;
     delete bitmap;
-    delete renderer;
+    delete sl;
 }
 
 void sin_test(){
@@ -234,7 +237,6 @@ void text_test(){
     Bitmap* sprite = new Bitmap(bitmap->width() / 3, bitmap->height() / 3, 0);
     Keyboard* keyboard = new Keyboard();
     Text* text = new Text("TEST!", 2, 3);
-    //Text(std::string value, unsigned char bgColor, unsigned char textColor);
     float color_count = 0;
     while(true){
         keyboard->update();
@@ -263,7 +265,9 @@ void text_test(){
 }
 
 void timer_test(){
-    Keyboard* keyboard = new Keyboard();
+    ServiceLocator* sl = new ServiceLocator();
+    sl->installService(new Keyboard());
+    Keyboard* keyboard = (Keyboard*)sl->service(IService::KEYBOARD_INPUT);
     Time::Timer* timer = new Time::Timer();
     while(true){
         keyboard->update();
@@ -274,17 +278,17 @@ void timer_test(){
         }
         Time::msleep(66);
     }
-    delete keyboard;
+    delete sl;
     delete timer;
 }
 
 int main(int argc, char** argv){
-    timer_test();
-    text_test();
-    sin_test();
-    gol_test();
+    //timer_test();
+    //text_test();
+    //sin_test();
+    //gol_test();
     bitmapTest();
-    blitTest();
+    //blitTest();
     //non_blocking_input_demo();
     return 0;
 }

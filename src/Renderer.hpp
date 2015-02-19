@@ -1,8 +1,9 @@
 #ifndef RENDERER_H
 #define RENDERER_H
+#include "IService.hpp"
 class Bitmap;
 class Text;
-class Renderer{
+class Renderer : public IService{
 private:
     unsigned int _width;
     unsigned int _height;
@@ -20,5 +21,6 @@ public:
     unsigned int width() const;
     unsigned int height() const;
     Bitmap* standardBitmap() const;
+    unsigned int type() const;
 };
 #endif

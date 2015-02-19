@@ -71,3 +71,7 @@ bool Keyboard::didReceiveInput(){
     select(fileno(stdin) + 1, &fds, NULL, NULL, &tv);
     return FD_ISSET(fileno(stdin), &fds);
 }
+
+unsigned int Keyboard::type() const{
+    return IService::KEYBOARD_INPUT;
+}
