@@ -6,13 +6,10 @@
 #include "Color.hpp"
 #include "Random.hpp"
 #include "Text.hpp"
-#include "ServiceLocator.hpp"
 #include "Timer.hpp"
 
 void bitmapTest(){
-    ServiceLocator* sl = new ServiceLocator();
-    sl->installService(new Renderer());
-    Renderer* renderer = (Renderer*)sl->service(IService::RENDERER);
+    Renderer* renderer = new Renderer();
     Keyboard* keyboard = Keyboard::shared_keyboard();
     Bitmap* bitmap = renderer->standardBitmap();
     int r_count = 0;
@@ -54,7 +51,6 @@ void bitmapTest(){
         timer->lock_at_fps(30);
     }
     delete bitmap;
-    delete sl;
 }
 
 void sin_test(){
@@ -114,7 +110,7 @@ void randomReseed(Bitmap* map){
 }
 
 void gol_test(){
-    Renderer* renderer = new Renderer();
+    Renderer* renderer = new Renderer(20, 20);
     Bitmap* pop1 = renderer->standardBitmap();
     Bitmap* pop2 = renderer->standardBitmap();
     pop1->clear(0);
@@ -280,13 +276,13 @@ void timer_test(){
 }
 
 int main(int argc, char** argv){
-    timer_test();
-    text_test();
-    sin_test();
-    gol_test();
+    //timer_test();
+    //text_test();
+    //sin_test();
     bitmapTest();
-    blitTest();
-    non_blocking_input_demo();
+    gol_test();
+    //blitTest();
+    //non_blocking_input_demo();
     return 0;
 }
 

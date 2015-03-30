@@ -3,7 +3,9 @@
 #include <cstdio>
 
 void Terminal::clearScreen(){
-    printf("\033[2J");
+    printf("\033[39;49m");
+    printf("\033[0m");
+    printf("\033[2J\n");
 }
 
 void Terminal::hideCursor(){

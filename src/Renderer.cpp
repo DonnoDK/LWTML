@@ -4,8 +4,17 @@
 #include "Terminal.hpp"
 #include "Text.hpp"
 #include "IService.hpp"
+#include <iostream>
 
 Renderer::Renderer(unsigned int width, unsigned int height){
+    if(width > Terminal::width()){
+        std::cerr << "[Warning] render window width is greater than terminal emulator width" << std::endl;
+        std::cerr << "terminal emulator width: " << Terminal::width() << ", requested width: " << width << std::endl;
+    }
+    if(height > Terminal::height()){
+        std::cerr << "[Warning] render window height is greater than terminal emulator height" << std::endl;
+        std::cerr << "terminal emulator height: " << Terminal::height() << ", requested height: " << height << std::endl;
+    }
     _width = width;
     _height = height;
     Terminal::clearScreen();
@@ -26,7 +35,9 @@ Renderer::~Renderer(){
 }
 
 void Renderer::setPixel(unsigned int x, unsigned int y, unsigned char color) const{
-    Terminal::setChar(' ', x, y, color, 0);
+    unsigned int terminal_offset_x = Terminal::width() / 2.0f - _width / 2.0f + x;
+    unsigned int terminal_offset_y = Terminal::height() / 2.0f - _height / 2.0f + y;
+    Terminal::setChar(' ', terminal_offset_x, terminal_offset_y, color, 0);
 }
 
 void Renderer::blit(Bitmap* bitmap) const{
