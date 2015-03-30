@@ -22,8 +22,17 @@ $(TARGET): $(SOURCES)
 objects/%.o: $(SOURCE_DIR)%.cpp
 	@mkdir -p $(OBJECT_DIR)
 	@echo "[compiling] $<"
-	@$(CC) -fPIC -c $< -o $@
+	@$(CC) $< -o $@
 
 clean:
 	@echo "[cleaning]"
 	@rm -Rf $(BUILD_DIR) $(OBJECT_DIR)
+	@rm -Rf ./release ./examples/*.o
+
+release: ./examples/game_of_life.o
+	@echo "compliling examples"
+	@mkdir -p release
+	@clang++ $< -o ./release/game_of_life -lLWTML
+
+./examples/game_of_life.o: ./examples/game_of_life.cpp
+	@clang++ -c $< -o ./examples/game_of_life.o
