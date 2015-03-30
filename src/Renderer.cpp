@@ -1,8 +1,8 @@
-#include "Renderer.hpp"
-#include "Bitmap.hpp"
-#include "Color.hpp"
-#include "Terminal.hpp"
-#include "Text.hpp"
+#include "../include/Renderer.hpp"
+#include "../include/Bitmap.hpp"
+#include "../include/Color.hpp"
+#include "../include/Terminal.hpp"
+#include "../include/Text.hpp"
 #include <iostream>
 
 Renderer::Renderer(unsigned int width, unsigned int height){

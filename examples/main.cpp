@@ -1,12 +1,6 @@
 #include <iostream>
+#include <LWTML/LWTML.hpp>
 #include <cmath>
-#include "Renderer.hpp"
-#include "Bitmap.hpp"
-#include "Keyboard.hpp"
-#include "Color.hpp"
-#include "Random.hpp"
-#include "Text.hpp"
-#include "Timer.hpp"
 
 void bitmapTest(){
     Renderer* renderer = new Renderer();

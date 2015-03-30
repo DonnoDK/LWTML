@@ -1,4 +1,4 @@
-#include "Timer.hpp"
+#include "../include/Timer.hpp"
 #include <unistd.h>
 #include <iostream>
 

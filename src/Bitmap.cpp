@@ -1,4 +1,4 @@
-#include "Bitmap.hpp"
+#include "../include/Bitmap.hpp"
 #include <cstring>
 Bitmap::Bitmap(unsigned int width, unsigned int height, unsigned char colorkey){
     _width = width;

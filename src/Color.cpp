@@ -1,4 +1,4 @@
-#include "Color.hpp"
+#include "../include/Color.hpp"
 unsigned char Color::colorFromRGB(unsigned char r, unsigned char g, unsigned b){
     unsigned char r_corrected = r / 51;
     unsigned char g_corrected = g / 51;

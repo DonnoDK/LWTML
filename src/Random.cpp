@@ -1,4 +1,4 @@
-#include "Random.hpp"
+#include "../include/Random.hpp"
 #include <ctime>
 #include <cstdlib>
 static bool seeded = false;

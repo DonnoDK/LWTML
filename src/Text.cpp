@@ -1,4 +1,4 @@
-#include "Text.hpp"
+#include "../include/Text.hpp"
 
 Text::Text(std::string value, unsigned char bgColor, unsigned char textColor){
     _value = value;

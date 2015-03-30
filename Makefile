@@ -2,21 +2,28 @@ SOURCE_DIR := src/
 SOURCES := $(wildcard $(SOURCE_DIR)*.cpp)
 OBJECT_DIR := objects/
 OBJECTS := $(addprefix $(OBJECT_DIR),$(notdir $(SOURCES:.cpp=.o)))
-RELEASE_DIR := release/
-TARGET := agm
+BUILD_DIR := lib/
+TARGET := libLWTML.dylib
+CC := clang++
 
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
-	@mkdir -p $(RELEASE_DIR)
+install:
+	@echo "[installing] target path: /usr/lib"
+	@cp ./lib/libLWTML.dylib /usr/lib
+	@mkdir -p /usr/include/LWTML
+	@cp ./include/*.hpp /usr/include/LWTML
+
+$(TARGET): $(SOURCES)
+	@mkdir -p $(BUILD_DIR)
 	@echo "[linking] $@"
-	@g++ $(OBJECTS) -o $(RELEASE_DIR)$@
+	@clang++ -dynamiclib $(SOURCES) -o $(BUILD_DIR)$@
 
 objects/%.o: $(SOURCE_DIR)%.cpp
 	@mkdir -p $(OBJECT_DIR)
 	@echo "[compiling] $<"
-	@g++ -c $< -o $@
+	@$(CC) -fPIC -c $< -o $@
 
 clean:
 	@echo "[cleaning]"
-	@rm -Rf $(RELEASE_DIR) $(OBJECT_DIR)
+	@rm -Rf $(BUILD_DIR) $(OBJECT_DIR)
