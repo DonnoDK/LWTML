@@ -17,7 +17,6 @@ Timer::Timer(){
     _now = 0;
     _delta = 0;
     _fps = 0;
-    _real_frame_time = 0;
 }
 
 void Timer::update(){

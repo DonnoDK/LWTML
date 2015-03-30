@@ -10,7 +10,6 @@ private:
     double _old;
     double _delta;
     double _fps;
-    double _real_frame_time;
 public:
     static Timer* locked_at_fps(double fps);
     Timer();
