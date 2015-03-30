@@ -5,28 +5,20 @@
 #include "Keyboard.hpp"
 #include "Color.hpp"
 #include "Random.hpp"
-#include "Time.hpp"
 #include "Text.hpp"
 #include "ServiceLocator.hpp"
-
-void counterTest(){
-    for(int count = 0; count < 1000000; count++){
-        std::cout << "\033[60;10H";
-        std::cout << count;
-    }
-    std::cout << std::endl;
-}
+#include "Timer.hpp"
 
 void bitmapTest(){
     ServiceLocator* sl = new ServiceLocator();
     sl->installService(new Renderer());
-    sl->installService(new Keyboard());
     Renderer* renderer = (Renderer*)sl->service(IService::RENDERER);
-    Keyboard* keyboard = (Keyboard*)sl->service(IService::KEYBOARD_INPUT);
+    Keyboard* keyboard = Keyboard::shared_keyboard();
     Bitmap* bitmap = renderer->standardBitmap();
     int r_count = 0;
     int g_count = 0;
     int b_count = 0;
+    Timer* timer = new Timer();
     while(true){
         keyboard->update();
         if(keyboard->isKeyDown('q')){
@@ -59,7 +51,7 @@ void bitmapTest(){
             }
         }
         renderer->blit(bitmap);
-        Time::msleep((1.0f / 30.0f) * 1000);
+        timer->lock_at_fps(30);
     }
     delete bitmap;
     delete sl;
@@ -68,8 +60,9 @@ void bitmapTest(){
 void sin_test(){
     Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
-    Keyboard* keyboard = new Keyboard();
+    Keyboard* keyboard = Keyboard::shared_keyboard();
     float count = 0;
+    Timer* timer = new Timer();
     while(true){
         keyboard->update();
         if(keyboard->isKeyDown('q')){
@@ -83,15 +76,17 @@ void sin_test(){
             bitmap->setPixel((bitmap->width() / 2.0f) + x_sin, bitmap->height() / 2.0f + y_sin, 196 + i);
         }
         renderer->blit(bitmap);
-        Time::msleep((1.0f / 15.0f) * 1000);
+        timer->lock_at_fps(15);
+
     }
+    delete timer;
     delete bitmap;
-    delete keyboard;
     delete renderer;
 }
 
 void non_blocking_input_demo(){
-    Keyboard* keyboard = new Keyboard();
+    Keyboard* keyboard = Keyboard::shared_keyboard();
+    Timer* timer = new Timer();
     while(true) {
         keyboard->update();
         if(keyboard->isKeyDown('a')){
@@ -103,9 +98,8 @@ void non_blocking_input_demo(){
         if(keyboard->isArrowKeyDown(Keyboard::UP)){
             std::cout << "UP!" << std::endl;
         }
-        Time::msleep(33);
+        timer->lock_at_fps(30);
     }
-    delete keyboard;
 }
 
 void randomReseed(Bitmap* map){
@@ -131,10 +125,12 @@ void gol_test(){
     Bitmap* temp = current_pop;
     current_pop = old_pop;
     old_pop = temp;
-    Keyboard* keyboard = new Keyboard();
+    Keyboard* keyboard = Keyboard::shared_keyboard();
     bool isRunning = true;
+    Timer* timer = new Timer();
 
     while(isRunning){
+        timer->update();
         keyboard->update();
         if(keyboard->isKeyDown('q')){
             isRunning = false;
@@ -189,12 +185,11 @@ void gol_test(){
                 old_pop->setPixel(x, y, cell);
             }
         }
+        timer->lock_at_fps(30);
 
-
-        Time::msleep((1.0f / 60.0f) * 1000);
     }
+    delete timer;
     delete renderer;
-    delete keyboard;
     delete pop1;
     delete pop2;
 }
@@ -204,8 +199,9 @@ void blitTest(){
     Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
     Bitmap* sprite = new Bitmap(bitmap->width() / 3, bitmap->height() / 3, 0);
-    Keyboard* keyboard = new Keyboard();
+    Keyboard* keyboard = Keyboard::shared_keyboard();
     float color_count = 0;
+    Timer* timer = new Timer();
     while(true){
         keyboard->update();
         if(keyboard->isKeyDown('q')){
@@ -222,9 +218,9 @@ void blitTest(){
         count += 0.1f;
         bitmap->blit(sprite, ((bitmap->width() / 2) - (sprite->width() / 2)) + sin(count) * bitmap->width() / 2, 10);
         renderer->blit(bitmap);
-        Time::msleep((1.0f / 30.0f) * 1000);
+        timer->update();
+        timer->lock_at_fps(30);
     }
-    delete keyboard;
     delete bitmap;
     delete sprite;
     delete renderer;
@@ -235,9 +231,10 @@ void text_test(){
     Renderer* renderer = new Renderer();
     Bitmap* bitmap = renderer->standardBitmap();
     Bitmap* sprite = new Bitmap(bitmap->width() / 3, bitmap->height() / 3, 0);
-    Keyboard* keyboard = new Keyboard();
+    Keyboard* keyboard = Keyboard::shared_keyboard();
     Text* text = new Text("TEST!", 2, 3);
     float color_count = 0;
+    Timer* timer = new Timer();
     while(true){
         keyboard->update();
         if(keyboard->isKeyDown('q')){
@@ -255,9 +252,9 @@ void text_test(){
         bitmap->blit(sprite, ((bitmap->width() / 2) - (sprite->width() / 2)) + sin(count) * bitmap->width() / 2, 10);
         renderer->blit(bitmap);
         renderer->renderText(text, 10, 10);
-        Time::msleep((1.0f / 60.0f) * 1000);
+        timer->update();
+        timer->lock_at_fps(60);
     }
-    delete keyboard;
     delete bitmap;
     delete sprite;
     delete renderer;
@@ -265,31 +262,31 @@ void text_test(){
 }
 
 void timer_test(){
-    ServiceLocator* sl = new ServiceLocator();
-    sl->installService(new Keyboard());
-    Keyboard* keyboard = (Keyboard*)sl->service(IService::KEYBOARD_INPUT);
-    Time::Timer* timer = new Time::Timer();
+    Keyboard* keyboard = Keyboard::shared_keyboard();
+    Timer* timer = Timer::locked_at_fps(1);
     while(true){
         keyboard->update();
-        std::cout << timer->deltaTime() << std::endl;
         timer->update();
+        int test = 0;
+        for(int i = 0; i < 100000000; i++){
+            test++;
+        }
+        std::cout << "delta_time: " << timer->delta_time() << std::endl;
         if(keyboard->isKeyDown('q')){
             break;
         }
-        Time::msleep(66);
     }
-    delete sl;
     delete timer;
 }
 
 int main(int argc, char** argv){
-    //timer_test();
-    //text_test();
-    //sin_test();
-    //gol_test();
+    timer_test();
+    text_test();
+    sin_test();
+    gol_test();
     bitmapTest();
-    //blitTest();
-    //non_blocking_input_demo();
+    blitTest();
+    non_blocking_input_demo();
     return 0;
 }
 

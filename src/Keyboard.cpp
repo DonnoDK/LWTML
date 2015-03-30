@@ -8,6 +8,15 @@ static struct termios _term_orig;
 static struct timeval tv;
 static fd_set fds;
 
+Keyboard* Keyboard::_instance = NULL;
+
+Keyboard* Keyboard::shared_keyboard(){
+    if(_instance == NULL){
+        _instance = new Keyboard();
+    }
+    return _instance;
+}
+
 Keyboard::Keyboard(){
     this->disableEchoAndCarriageReturnOnInput();
     _keys = 0;
@@ -58,7 +67,7 @@ bool Keyboard::isKeyDown(char key) const{
     return _keys & (1 << (key - 97));
 }
 
-bool Keyboard::isArrowKeyDown(char arrowKey) const{
+bool Keyboard::isArrowKeyDown(Keyboard::ArrowKeys arrowKey) const{
     if(arrowKey < UP || arrowKey > DOWN){
         return false;
     }
@@ -70,8 +79,4 @@ bool Keyboard::didReceiveInput(){
     FD_SET(fileno(stdin), &fds);
     select(fileno(stdin) + 1, &fds, NULL, NULL, &tv);
     return FD_ISSET(fileno(stdin), &fds);
-}
-
-unsigned int Keyboard::type() const{
-    return IService::KEYBOARD_INPUT;
 }
