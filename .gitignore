@@ -1,5 +1,4 @@
-src/*
-!src/*.cpp
-!src/*.hpp
 objects/
 release/
+lib/
+**/*.pyc
