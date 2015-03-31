@@ -40,8 +40,12 @@ Ok, so I'm midly intrigued. How do I get started?
 Compile and install the library:
         
         make && sudo make install
+        
+Do note that the last step requires root access and installs headers to */usr/local/include* and the library to */usr/local/lib*. If you rather not have that happen, you can make gcc/clang search for the library and headers elsewhere using:
 
-Include the LWTML headers and link against LWTML when compiling:
+        clang++ ... -L<path_to_lib> -I<path_to_headers> -lLWTML -o ...
+
+If you did *make install* you just include the LWTML headers and link against LWTML when compiling:
 
         clang++ <your_program>.cpp -lLWTML -o <your_program>
         
