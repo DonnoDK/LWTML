@@ -22,7 +22,7 @@ simulate Game Of Life, or just rice your desktop with it (the good people on
 /r/unixporn are especially creative in this regard). Here are some examples of
 how programs using LWTML might look like:
 
-gol
+![Game Of Life Demo](http://i.imgur.com/FgeCNWZ.gif)
 
 sprite example.
 
