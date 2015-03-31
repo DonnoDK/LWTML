@@ -76,3 +76,15 @@ And here is a sample of a program using LWTML:
         }
         
 This is a rather dull example, but should get you started.
+
+So, what is supported? Where does it work?
+------------------------------------------
+At the moment it's only tested on and made to work on OS X, but making it work on GNU/Linux is simply a matter of using the correct compile flags, which I'll get to in the near future. It will _probably_ never support Windows. I don't own any version of Windows, so I can't really develop for it without too much hassle.
+
+Are there any caveats or know bugs?
+-----------------------------------
+Know bugs, a few yes, and there are probably a whole slew of bugs that I don't know of yet.
+
+Known bugs:
+- The iTerm2 terminal emulator for OSX seems to be significantly slower at refreshing the display compared to urxvt under X11. You will probably get something near 10-15fps in iTerm2 compared to ~200fps in urxvt. I'm not sure this is something I have control over, and I assume this has to do with the implementation of iTerm2.
+- There is currently an interface for rendering normal ascii text. It does not work properly in iTerm2. 
