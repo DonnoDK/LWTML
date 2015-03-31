@@ -103,18 +103,17 @@ void text_test(){
         count += 0.1f;
         bitmap->blit_at_offset(&sprite, ((bitmap->width() / 2) - (sprite.width() / 2)) + sin(count) * bitmap->width() / 2, 10);
         renderer.blit(bitmap);
-        //renderer->render_text(text, 10, 10);
+        renderer.render_text(&text, 10, 10);
     }
     delete bitmap;
+    delete timer;
 }
 
 
 int main(int argc, char** argv){
-    //timer_test();
     text_test();
-    //sin_test();
-    //bitmapTest();
-    //non_blocking_input_demo();
+    sin_test();
+    bitmapTest();
     return 0;
 }
 
