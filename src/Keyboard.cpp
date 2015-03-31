@@ -67,11 +67,11 @@ bool Keyboard::is_key_down(char key) const{
     return _keys & (1 << (key - 97));
 }
 
-bool Keyboard::is_arrow_key_down(Keyboard::ArrowKeys arrowKey) const{
-    if(arrowKey < UP || arrowKey > DOWN){
+bool Keyboard::is_arrow_key_down(Keyboard::arrow_keys key) const{
+    if(key < UP || key > DOWN){
         return false;
     }
-    return _keys & (1 << (arrowKey - 39));
+    return _keys & (1 << (key - 39));
 }
 
 bool Keyboard::did_receive_input(){

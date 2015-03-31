@@ -8,7 +8,7 @@ private:
     unsigned int _keys;
     static Keyboard* _instance;
 public:
-    enum ArrowKeys{
+    enum arrow_keys{
         UP = 65,
         RIGHT,
         LEFT,
@@ -19,6 +19,6 @@ public:
     ~Keyboard();
     void update();
     bool is_key_down(char key) const;
-    bool is_arrow_key_down(ArrowKeys arrowKey) const;
+    bool is_arrow_key_down(Keyboard::arrow_keys key) const;
 };
 #endif

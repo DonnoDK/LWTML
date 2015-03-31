@@ -4,6 +4,7 @@
 #include "../include/Terminal.hpp"
 #include "../include/Text.hpp"
 #include <iostream>
+#include <cstring>
 
 Renderer::Renderer(unsigned int width, unsigned int height){
     if(width > Terminal::width()){
@@ -16,6 +17,7 @@ Renderer::Renderer(unsigned int width, unsigned int height){
     }
     _width = width;
     _height = height;
+    initialize_buffers();
     Terminal::clear_screen();
     Terminal::hide_cursor();
 }
@@ -23,14 +25,23 @@ Renderer::Renderer(unsigned int width, unsigned int height){
 Renderer::Renderer(){
     _width = Terminal::width();
     _height = Terminal::height();
+    initialize_buffers();
     Terminal::clear_screen();
     Terminal::hide_cursor();
 }
 
+void Renderer::initialize_buffers(){
+    _symbol_buffer = (unsigned char*)malloc(sizeof(char) * _width * _height);
+    _bg_color_buffer = (unsigned char*)malloc(sizeof(char) * _width * _height);
+    _fg_color_buffer = (unsigned char*)malloc(sizeof(char) * _width * _height);
+}
+
 Renderer::~Renderer(){
     Terminal::show_cursor();
-    clear_buffer(0);
     Terminal::clear_screen();
+    free(_symbol_buffer);
+    free(_bg_color_buffer);
+    free(_fg_color_buffer);
 }
 
 void Renderer::set_pixel(unsigned int x, unsigned int y, unsigned char color) const{
@@ -75,7 +86,6 @@ unsigned int Renderer::height() const{
     return _height;
 }
 
-/* TODO: Bitmap* Renderer::standardBitmap(unsigned char colorkey) const */
 Bitmap* Renderer::standard_bitmap() const{
     /* TODO: change to a more sane colorkey */
     /* TODO: or pass in trough parameter */
