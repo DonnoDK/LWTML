@@ -29,7 +29,7 @@ Note that those are just lame demos I quickly throw together. Also, the refresh 
 
 But why not just use ncurses?
 -----------------------------
-Sure, you can do that - no hurt feelings.
+Sure, you can do that - no hurt feelings. I do aim to make it easier to get started using my library compared to ncurses. Ncurses is great, but it has gained some "weight" over the years, meaning a lot of boilerplate code is necessary to get started using it.
 
 Does it work yet?
 -----------------
