@@ -9,10 +9,12 @@ CC := clang++
 all: $(TARGET)
 
 install:
-	@echo "[installing] target path: /usr/lib"
-	@cp ./lib/libLWTML.dylib /usr/lib
-	@mkdir -p /usr/include/LWTML
-	@cp ./include/*.hpp /usr/include/LWTML
+	@echo "[installing] target paths: /usr/local/lib and /usr/local/include/LWTML"
+	@mkdir -p /usr/local
+	@mkdir -p /usr/local/lib
+	@mkdir -p /usr/local/include/LWTML
+	@cp ./lib/libLWTML.dylib /usr/local/lib/
+	@cp ./include/*.hpp /usr/local/include/LWTML/
 
 $(TARGET): $(SOURCES)
 	@mkdir -p $(BUILD_DIR)
@@ -36,3 +38,8 @@ release: ./examples/game_of_life.o
 
 ./examples/game_of_life.o: ./examples/game_of_life.cpp
 	@clang++ -c $< -o ./examples/game_of_life.o
+
+uninstall:
+	@echo "removing lib and headers"
+	@rm -Rf /usr/local/lib/libLWTML.dylib
+	@rm -Rf /usr/local/include/LWTML

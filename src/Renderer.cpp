@@ -16,27 +16,27 @@ Renderer::Renderer(unsigned int width, unsigned int height){
     }
     _width = width;
     _height = height;
-    Terminal::clearScreen();
-    Terminal::hideCursor();
+    Terminal::clear_screen();
+    Terminal::hide_cursor();
 }
 
 Renderer::Renderer(){
     _width = Terminal::width();
     _height = Terminal::height();
-    Terminal::clearScreen();
-    Terminal::hideCursor();
+    Terminal::clear_screen();
+    Terminal::hide_cursor();
 }
 
 Renderer::~Renderer(){
-    Terminal::showCursor();
-    clearBuffer(0);
-    Terminal::clearScreen();
+    Terminal::show_cursor();
+    clear_buffer(0);
+    Terminal::clear_screen();
 }
 
-void Renderer::setPixel(unsigned int x, unsigned int y, unsigned char color) const{
+void Renderer::set_pixel(unsigned int x, unsigned int y, unsigned char color) const{
     unsigned int terminal_offset_x = Terminal::width() / 2.0f - _width / 2.0f + x;
     unsigned int terminal_offset_y = Terminal::height() / 2.0f - _height / 2.0f + y;
-    Terminal::setChar(' ', terminal_offset_x, terminal_offset_y, color, 0);
+    Terminal::set_char(' ', terminal_offset_x, terminal_offset_y, color, 0);
 }
 
 void Renderer::blit(Bitmap* bitmap) const{
@@ -45,27 +45,26 @@ void Renderer::blit(Bitmap* bitmap) const{
         for(unsigned int x = 0; x < bitmap->width(); x++){
             unsigned char color = bitmap->pixel(x, y);
             if(color != colorkey){
-                this->setPixel(x, y, color);
+                this->set_pixel(x, y, color);
             }
         }
     }
 }
 
-void Renderer::clearBuffer(unsigned char color) const{
+void Renderer::clear_buffer(unsigned char color) const{
     for(unsigned int y = 0; y < _width; y++){
         for(unsigned int x = 0; x < _height; x++){
-            this->setPixel(x, y, color);
+            this->set_pixel(x, y, color);
         }
     }
 }
 
-void Renderer::renderText(Text* text, unsigned int x, unsigned int y) const{
+void Renderer::render_text(Text* text, unsigned int x, unsigned int y) const{
     unsigned int str_len = text->value().length();
     if(x + str_len > _width){
         return;
     }
-    Terminal::writeString(text->value().c_str(), x, y, text->backgroundColor(), text->textColor());
-    //void writeString(const char* string, unsigned int x, unsigned int y, unsigned bgcolor, unsigned char fgcolor);
+    Terminal::write_string(text->value().c_str(), x, y, text->bg_color(), text->text_color());
 }
 
 unsigned int Renderer::width() const{
@@ -77,8 +76,8 @@ unsigned int Renderer::height() const{
 }
 
 /* TODO: Bitmap* Renderer::standardBitmap(unsigned char colorkey) const */
-Bitmap* Renderer::standardBitmap() const{
+Bitmap* Renderer::standard_bitmap() const{
     /* TODO: change to a more sane colorkey */
     /* TODO: or pass in trough parameter */
-    return new Bitmap(_width, _height, Color::colorFromRGB(255,0,255));
+    return new Bitmap(_width, _height, Color::color_from_rgb(255,0,255));
 }

@@ -2,9 +2,9 @@
 #define KEYBOARD_HPP
 class Keyboard{
 private:
-    void disableEchoAndCarriageReturnOnInput();
-    void resetTerminalSettings();
-    bool didReceiveInput();
+    void disable_echo_and_carriage_return_on_input();
+    void reset_terminal_settings();
+    bool did_receive_input();
     unsigned int _keys;
     static Keyboard* _instance;
 public:
@@ -18,8 +18,7 @@ public:
     Keyboard();
     ~Keyboard();
     void update();
-    bool isKeyDown(char key) const;
-    bool isArrowKeyDown(ArrowKeys arrowKey) const;
-    unsigned int type() const;
+    bool is_key_down(char key) const;
+    bool is_arrow_key_down(ArrowKeys arrowKey) const;
 };
 #endif

@@ -5,7 +5,7 @@
 void bitmapTest(){
     Renderer* renderer = new Renderer();
     Keyboard* keyboard = Keyboard::shared_keyboard();
-    Bitmap* bitmap = renderer->standardBitmap();
+    Bitmap* bitmap = renderer->standard_bitmap();
     int r_count = 0;
     int g_count = 0;
     int b_count = 0;
@@ -13,7 +13,7 @@ void bitmapTest(){
     while(true){
         timer->update();
         keyboard->update();
-        if(keyboard->isKeyDown('q')){
+        if(keyboard->is_key_down('q')){
             break;
         }
         for(unsigned int y = 0; y < bitmap->height(); y++){
@@ -21,8 +21,8 @@ void bitmapTest(){
                 unsigned char r = r_count;
                 unsigned char g = g_count;
                 unsigned char b = b_count;
-                unsigned char color = Color::colorFromRGB(r, g, b);
-                bitmap->setPixel(x, y, color);
+                unsigned char color = Color::color_from_rgb(r, g, b);
+                bitmap->set_pixel(x, y, color);
                 if(b_count > 255){
                     r_count = 0;
                     g_count = 0;
@@ -51,21 +51,21 @@ void bitmapTest(){
 
 void sin_test(){
     Renderer* renderer = new Renderer();
-    Bitmap* bitmap = renderer->standardBitmap();
+    Bitmap* bitmap = renderer->standard_bitmap();
     Keyboard* keyboard = Keyboard::shared_keyboard();
     float count = 0;
     Timer* timer = new Timer();
     while(true){
         keyboard->update();
-        if(keyboard->isKeyDown('q')){
+        if(keyboard->is_key_down('q')){
             break;
         }
-        bitmap->clear(0);
+        bitmap->clear_with_color(0);
         count += 0.04f;
         for(int i = 0; i < 20; i++){
             float x_sin = sin(count - (i * 0.025f)) * bitmap->width() / 2.0f;
             float y_sin = cos(count - (i * 0.025f)) * bitmap->height() / 2.0f;
-            bitmap->setPixel((bitmap->width() / 2.0f) + x_sin, bitmap->height() / 2.0f + y_sin, 196 + i);
+            bitmap->set_pixel((bitmap->width() / 2.0f) + x_sin, bitmap->height() / 2.0f + y_sin, 196 + i);
         }
         renderer->blit(bitmap);
         timer->lock_at_fps(15);
@@ -79,45 +79,41 @@ void sin_test(){
 
 void text_test(){
     float count = 0;
-    Renderer* renderer = new Renderer();
-    Bitmap* bitmap = renderer->standardBitmap();
-    Bitmap* sprite = new Bitmap(bitmap->width() / 3, bitmap->height() / 3, 0);
+    Renderer renderer;
+    Bitmap* bitmap = renderer.standard_bitmap();
+    Bitmap sprite(bitmap->width() / 3, bitmap->height() / 3, 0);
     Keyboard* keyboard = Keyboard::shared_keyboard();
-    Text* text = new Text("TEST!", 2, 3);
+    Text text("TEST!", 2, 3);
     float color_count = 0;
-    Timer* timer = new Timer();
+    Timer* timer = Timer::locked_at_fps(30);
     while(true){
+        timer->update();
         keyboard->update();
-        if(keyboard->isKeyDown('q')){
+        if(keyboard->is_key_down('q')){
             break;
         }
-        bitmap->clear(0);
-        for(unsigned int y = 0; y < sprite->height(); y++){
-            for(unsigned int x = 0; x < sprite->width(); x++){
+        bitmap->clear_with_color(0);
+        for(unsigned int y = 0; y < sprite.height(); y++){
+            for(unsigned int x = 0; x < sprite.width(); x++){
                 int bgcolor = color_count + x + y + 100 % 255;
                 color_count += 0.01f;
-                sprite->setPixel(x, y, bgcolor);
+                sprite.set_pixel(x, y, bgcolor);
             }
         }
         count += 0.1f;
-        bitmap->blit(sprite, ((bitmap->width() / 2) - (sprite->width() / 2)) + sin(count) * bitmap->width() / 2, 10);
-        renderer->blit(bitmap);
-        renderer->renderText(text, 10, 10);
-        timer->update();
-        timer->lock_at_fps(60);
+        bitmap->blit_at_offset(&sprite, ((bitmap->width() / 2) - (sprite.width() / 2)) + sin(count) * bitmap->width() / 2, 10);
+        renderer.blit(bitmap);
+        //renderer->render_text(text, 10, 10);
     }
     delete bitmap;
-    delete sprite;
-    delete renderer;
-    delete text;
 }
 
 
 int main(int argc, char** argv){
     //timer_test();
-    //text_test();
+    text_test();
     //sin_test();
-    bitmapTest();
+    //bitmapTest();
     //non_blocking_input_demo();
     return 0;
 }

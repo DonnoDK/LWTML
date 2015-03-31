@@ -9,11 +9,11 @@ private:
 public:
     Bitmap(unsigned int width, unsigned int height, unsigned char colorkey);
     ~Bitmap();
-    void setPixel(unsigned int x, unsigned int y, unsigned char color);
-    void clear(unsigned char color);
+    void set_pixel(unsigned int x, unsigned int y, unsigned char color);
+    void clear_with_color(unsigned char color);
     unsigned char pixel(unsigned int x, unsigned int y) const;
     unsigned char colorkey() const;
-    void blit(Bitmap* bitmap, unsigned int xOffset, unsigned int yOffset);
+    void blit_at_offset(Bitmap* bitmap, unsigned int xOffset, unsigned int yOffset);
     unsigned int height() const;
     unsigned int width() const;
 };

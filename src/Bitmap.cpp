@@ -11,7 +11,7 @@ Bitmap::~Bitmap(){
     delete[] _pixels;
 }
 
-void Bitmap::setPixel(unsigned int x, unsigned int y, unsigned char color){
+void Bitmap::set_pixel(unsigned int x, unsigned int y, unsigned char color){
     if(x >= _width || y >= _height){
         /* TODO: handle error */
         return;
@@ -19,19 +19,19 @@ void Bitmap::setPixel(unsigned int x, unsigned int y, unsigned char color){
     _pixels[x + y * _width] = color;
 }
 
-void Bitmap::blit(Bitmap* bitmap, unsigned int xOffset, unsigned int yOffset){
+void Bitmap::blit_at_offset(Bitmap* bitmap, unsigned int xOffset, unsigned int yOffset){
     unsigned char colorkey = bitmap->colorkey();
     for(unsigned int y = 0; y < bitmap->height(); y++){
         for(unsigned int x = 0; x < bitmap->width(); x++){
             unsigned char pixel = bitmap->pixel(x, y);
             if(pixel != colorkey){
-                setPixel(xOffset + x, yOffset + y, pixel);
+                set_pixel(xOffset + x, yOffset + y, pixel);
             }
         }
     }
 }
 
-void Bitmap::clear(unsigned char color){
+void Bitmap::clear_with_color(unsigned char color){
     memset(_pixels, color, _width * _height);
 }
 

@@ -6,19 +6,19 @@ Text::Text(std::string value, unsigned char bgColor, unsigned char textColor){
     _textColor = textColor;
 }
 
-void Text::setBackgroundColor(unsigned char bgColor){
+void Text::set_bg_color(unsigned char bgColor){
     _bgColor = bgColor;
 }
 
-void Text::setTextColor(unsigned char textColor){
+void Text::set_text_color(unsigned char textColor){
     _textColor = textColor;
 }
 
-unsigned char Text::backgroundColor() const{
+unsigned char Text::bg_color() const{
     return _bgColor;
 }
 
-unsigned char Text::textColor() const{
+unsigned char Text::text_color() const{
     return _textColor;
 }
 

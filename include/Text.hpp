@@ -8,10 +8,10 @@ private:
     unsigned char _textColor;
 public:
     Text(std::string value, unsigned char bgColor, unsigned char textColor);
-    void setBackgroundColor(unsigned char bfColor);
-    void setTextColor(unsigned char textColor);
-    unsigned char backgroundColor() const;
-    unsigned char textColor() const;
+    void set_bg_color(unsigned char bfColor);
+    void set_text_color(unsigned char textColor);
+    unsigned char bg_color() const;
+    unsigned char text_color() const;
     unsigned int length() const;
     const std::string& value() const;
 };

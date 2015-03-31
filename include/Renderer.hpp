@@ -6,19 +6,17 @@ class Renderer{
 private:
     unsigned int _width;
     unsigned int _height;
-    void setPixel(unsigned int x, unsigned int y, unsigned char color) const;
-    void clearScreen() const;
-    void hideCursor() const;
-    void showCursor() const;
+    void set_pixel(unsigned int x, unsigned int y, unsigned char color) const;
+    void clear_screen() const;
 public:
     Renderer(unsigned int width, unsigned int height);
     Renderer();
     ~Renderer();
     void blit(Bitmap* bitmap) const;
-    void renderText(Text* text, unsigned int x, unsigned int y) const;
-    void clearBuffer(unsigned char color) const;
+    void render_text(Text* text, unsigned int x, unsigned int y) const;
+    void clear_buffer(unsigned char color) const;
     unsigned int width() const;
     unsigned int height() const;
-    Bitmap* standardBitmap() const;
+    Bitmap* standard_bitmap() const;
 };
 #endif
