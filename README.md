@@ -22,9 +22,9 @@ simulate Game Of Life, or just rice your desktop with it (the good people on
 /r/unixporn are especially creative in this regard). Here are some examples of
 how programs using LWTML might look like:
 
-![Game Of Life Demo](http://i.imgur.com/FgeCNWZ.gif)
+![Game Of Life demo](http://i.imgur.com/FgeCNWZ.gif)
 
-sprite example.
+![Sprite blitting demo](http://i.imgur.com/sMFvrFd.gif)
 
 But why not just use ncurses?
 -----------------------------
