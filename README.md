@@ -2,7 +2,7 @@ Lightweight Terminal Media Library
 ==================================
 
 Lightweight Terminal Media Library, or LWTML for short, is a small C++ library
-that makes it easy to output simple graphics to a supported terminal emulator.
+that makes it easy to output simple graphics to a supported terminal emulator. It also provides non-blocking keyboard input and timing - both useful in soft-realtime interactive applications and games.
 
 But why?
 -------
@@ -17,11 +17,19 @@ close in fidelity.
 
 But what can I use it for?
 --------------------------
-Game development - small games like packman, pong, tetris. Generate fractals or
-simulate Game Of Life, and rice your desktop with it (the good people on
+Game development - small games like packman, pong, tetris, rogue-likes. Generate fractals or
+simulate Game Of Life, or just rice your desktop with it (the good people on
 /r/unixporn are especially creative in this regard). Here are some examples of
 how programs using LWTML might look like:
 
 gol
 
 sprite example.
+
+But why not just use ncurses?
+-----------------------------
+Sure, you can do that - no hurt feelings.
+
+Does it work yet?
+-----------------
+The state of the library is still pretty much beta: it has only been tested on OS X at the moment, the interface might change, the makefile and install proceedure is crude - so please use it at your own risk. Contributions are welcome - bug reports, feature requests, you name it. Also, if you create something using the library, be sure to shoot me a message as I would be excited to see what you have cooked up.
