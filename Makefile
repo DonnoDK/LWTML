@@ -21,25 +21,24 @@ $(TARGET): $(SOURCES)
 	@echo "[linking] $@"
 	@clang++ -dynamiclib $(SOURCES) -o $(BUILD_DIR)$@
 
-objects/%.o: $(SOURCE_DIR)%.cpp
-	@mkdir -p $(OBJECT_DIR)
-	@echo "[compiling] $<"
-	@$(CC) $< -o $@
-
 clean:
 	@echo "[cleaning]"
 	@rm -Rf $(BUILD_DIR) $(OBJECT_DIR)
 	@rm -Rf ./release ./examples/*.o
 
-release: ./examples/game_of_life.o
+examples: game_of_life
+
+game_of_life: objects/game_of_life.o
 	@echo "compliling examples"
 	@mkdir -p release
 	@clang++ $< -o ./release/game_of_life -lLWTML
 
-./examples/game_of_life.o: ./examples/game_of_life.cpp
-	@clang++ -c $< -o ./examples/game_of_life.o
+objects/game_of_life.o: examples/game_of_life.cpp
+	@mkdir -p objects
+	@clang++ -c $< -o objects/game_of_life.o
 
 uninstall:
 	@echo "removing lib and headers"
 	@rm -Rf /usr/local/lib/libLWTML.dylib
 	@rm -Rf /usr/local/include/LWTML
+	@rm -Rf objects release
