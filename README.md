@@ -88,3 +88,13 @@ Know bugs, a few yes, and there are probably a whole slew of bugs that I don't k
 Known bugs:
 - The iTerm2 terminal emulator for OSX seems to be significantly slower at refreshing the display compared to urxvt under X11. You will probably get something near 10-15fps in iTerm2 compared to ~200fps in urxvt. I'm not sure this is something I have control over, and I assume this has to do with the implementation of iTerm2.
 - There is currently an interface for rendering normal ascii text. It does not work properly in iTerm2. 
+
+Planned enhancements:
+----------------------
+- Proper namespacing. Considered candidates: LWTML::, lwtml:: or lw::.
+- Convinient classes such as Rect, Point, etc.
+- Proper error handling.
+- Double buffering for the renderer. As of now, blittet bitmaps are just spilled directly into the terminal.
+- Loading of PNGs to internal bitmaps.
+- Persistent valuestore, similar to Unity3d's PlayerPrefs.
+- ...
