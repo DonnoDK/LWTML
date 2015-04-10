@@ -25,7 +25,7 @@ how programs using LWTML might look like:
 
 ![Sprite blitting demo](http://i.imgur.com/sMFvrFd.gif)
 
-Note that those are just lame demos I quickly throw together. Also, the refresh rate of the gifs are terrible.
+Note that those are just lame demos I quickly threw together. Also, the refresh rate of the gifs are terrible.
 
 But why not just use ncurses?
 -----------------------------
@@ -81,7 +81,7 @@ So, what is supported? Where does it work?
 ------------------------------------------
 At the moment it's only tested on and made to work on OS X, but making it work on GNU/Linux is simply a matter of using the correct compile flags, which I'll get to in the near future. It will _probably_ never support Windows. I don't own any version of Windows, so I can't really develop for it without too much hassle.
 
-Are there any caveats or know bugs?
+Are there any caveats or known bugs?
 -----------------------------------
 Know bugs, a few yes, and there are probably a whole slew of bugs that I don't know of yet.
 
