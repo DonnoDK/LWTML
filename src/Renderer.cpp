@@ -5,6 +5,7 @@
 #include "../include/Text.hpp"
 #include <iostream>
 #include <cstring>
+#include <cstdlib>
 
 Renderer::Renderer(unsigned int width, unsigned int height){
     if(width > Terminal::width()){

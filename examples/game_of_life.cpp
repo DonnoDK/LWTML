@@ -19,7 +19,7 @@ int main(int argc, char** argv){
     randomReseed(old_pop);
     Keyboard* keyboard = Keyboard::shared_keyboard();
     bool isRunning = true;
-    Timer* timer = Timer::locked_at_fps(30);
+    Timer* timer = Timer::locked_at_fps(15);
     while(isRunning){
         timer->update();
         keyboard->update();

@@ -2,3 +2,5 @@ objects/
 release/
 lib/
 **/*.pyc
+**/*.o
+**/*.so
